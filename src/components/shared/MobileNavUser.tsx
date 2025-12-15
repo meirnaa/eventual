@@ -11,10 +11,10 @@ import {
 } from "@/components/ui/sheet"
 import Image from "next/image"
 import { Separator } from "../ui/separator"
-import NavItems from "./NavItemsPublic"
+import NavItemsUser from './NavItemsUser'
 
 
-const MobileNav = () => {
+const MobileNavUser = () => {
   return (
     <nav className="md:hidden">
       <Sheet>
@@ -35,11 +35,11 @@ const MobileNav = () => {
             height={38}
           />
           <Separator className="border border-gray-50" />
-          <NavItems />
+          <NavItemsUser />
         </SheetContent>
       </Sheet>
     </nav>
   )
 }
 
-export default MobileNav
+export default MobileNavUser

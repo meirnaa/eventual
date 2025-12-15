@@ -4,7 +4,7 @@ import Image from 'next/image'
 import { SignedIn, SignedOut, UserButton } from "@clerk/nextjs"
 import { CircleUser } from "lucide-react"
 import { Button } from '../ui/button'
-import NavItems from './NavItems'
+import NavItemsPublic from './NavItemsPublic'
 import MobileNav from './MobileNav'
 
 const Header = () => {
@@ -20,7 +20,7 @@ const Header = () => {
 
         <SignedIn>
           <nav className="md:flex-between hidden w-full max-w-xs">
-            <NavItems />
+            <NavItemsPublic />
           </nav>
         </SignedIn>
       

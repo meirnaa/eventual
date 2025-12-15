@@ -3,8 +3,8 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { SignedIn, SignedOut, UserButton } from "@clerk/nextjs"
 import { Button } from '../ui/button'
-import NavItems from './NavItems'
-import MobileNav from './MobileNav'
+import NavItemsUser from './NavItemsUser'
+import MobileNavUser from './MobileNavUser'
 
 const HeaderUser = () => {
   return (
@@ -19,14 +19,14 @@ const HeaderUser = () => {
 
         <SignedIn>
           <nav className="md:flex-between hidden w-full max-w-xs">
-            <NavItems />
+            <NavItemsUser />
           </nav>
         </SignedIn>
       
         <div className="flex w-32 justify-end gap-3">
           <SignedIn>
             <UserButton afterSignOutUrl="/" />
-            <MobileNav />
+            <MobileNavUser />
           </SignedIn>
 
           <SignedOut>

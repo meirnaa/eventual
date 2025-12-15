@@ -1,16 +1,43 @@
-export const headerLinksByRole = {
-  USER: [
-    { label: 'Eventos', route: '/user/events' },
-    { label: 'Meus Ingressos', route: '/user/tickets' },
-    { label: 'Perfil', route: '/user/profile' },
-  ],
-  ORGANIZER: [
-    { label: 'Dashboard', route: '/organizer' },
-    { label: 'Meus Eventos', route: '/organizer/events' },
-    { label: 'Criar Evento', route: '/organizer/events/new' },
-  ],
-};
+export const headerLinksUser = [
+  {
+    label: 'Home',
+    route: '/',
+  },
+  {
+    label: 'Minhas inscrições',
+    route: '/events/inscricoes',
+  },
+  {
+    label: 'Meu Perfil',
+    route: '/profile',
+  },
+]
 
+export const headerLinksOrganizer = [
+  {
+    label: 'Home',
+    route: '/',
+  },
+  {
+    label: 'Criar Evento',
+    route: '/events/create',
+  },
+  {
+    label: 'Meu Perfil',
+    route: '/profile',
+  },
+]
+
+export const headerLinksPublic = [
+  {
+    label: 'Home',
+    route: '/',
+  },
+  {
+    label: 'Eventos',
+    route: '/events/create',
+  },
+]
 
 export const eventDefaultValues = {
   title: '',
