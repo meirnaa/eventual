@@ -1,0 +1,168 @@
+generator client {
+  provider     = "prisma-client-js"
+  moduleFormat = "cjs"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Usuario {
+  id                       String        @unique
+  nome                     String
+  email                    String        @unique
+  senhaHash                String
+  cidade                   String?
+  fotoUrl                  String?
+  visibilidadeParticipacao Boolean       @default(true)
+  ratingOrganizador        Float         @default(0)
+  role                     UserRole
+  createdAt                DateTime      @default(now())
+  amizadesRecebidas        Amizade[]     @relation("Destinatario")
+  amizadesEnviadas         Amizade[]     @relation("Solicitante")
+  avaliacoes               Avaliacao[]
+  certificados             Certificado[]
+  eventosOrganizados       Evento[]      @relation("OrganizadorEventos")
+  inscricoes               Inscricao[]
+  mensagensRecebidas       Mensagem[]    @relation("Destinatario")
+  mensagensEnviadas        Mensagem[]    @relation("Remetente")
+}
+
+model Evento {
+  id                  String        @id @default(uuid())
+  organizadorId       String
+  titulo              String
+  descricao           String
+  localEndereco       String?
+  localUrl            String?
+  dataInicio          DateTime
+  dataFim             DateTime
+  preco               Float?
+  tipo                EventoTipo
+  exigeAprovacao      Boolean       @default(false)
+  inscricaoAbre       DateTime
+  inscricaoFecha      DateTime
+  maxInscricoes       Int?
+  nCheckinsPermitidos Int           @default(1)
+  status              EventoStatus
+  bannerUrl           String?
+  cargaHoraria        Int
+  createdAt           DateTime      @default(now())
+  avaliacoes          Avaliacao[]
+  certificados        Certificado[]
+  organizador         Usuario       @relation("OrganizadorEventos", fields: [organizadorId], references: [id])
+  inscricoes          Inscricao[]
+}
+
+model Inscricao {
+  id                  String            @id @default(uuid())
+  eventoId            String
+  usuarioId           String
+  status              InscricaoStatus
+  timestampInscricao  DateTime          @default(now())
+  timestampPagamento  DateTime?
+  nCheckinsRealizados Int               @default(0)
+  certificadoEmitido  Boolean           @default(false)
+  checkins            CheckinRegistro[]
+  evento              Evento            @relation(fields: [eventoId], references: [id])
+  usuario             Usuario           @relation(fields: [usuarioId], references: [id])
+
+  @@unique([eventoId, usuarioId])
+}
+
+model CheckinRegistro {
+  id          String        @id @default(uuid())
+  inscricaoId String
+  timestamp   DateTime      @default(now())
+  metodo      MetodoCheckin
+  inscricao   Inscricao     @relation(fields: [inscricaoId], references: [id])
+}
+
+model Amizade {
+  id             String        @id @default(uuid())
+  solicitanteId  String
+  destinatarioId String
+  status         StatusAmizade
+  timestamp      DateTime      @default(now())
+  destinatario   Usuario       @relation("Destinatario", fields: [destinatarioId], references: [id])
+  solicitante    Usuario       @relation("Solicitante", fields: [solicitanteId], references: [id])
+
+  @@unique([solicitanteId, destinatarioId])
+}
+
+model Mensagem {
+  id             String       @id @default(uuid())
+  remetenteId    String
+  destinatarioId String
+  tipo           TipoMensagem
+  conteudo       String?
+  anexoUrl       String?
+  timestamp      DateTime     @default(now())
+  destinatario   Usuario      @relation("Destinatario", fields: [destinatarioId], references: [id])
+  remetente      Usuario      @relation("Remetente", fields: [remetenteId], references: [id])
+}
+
+model Avaliacao {
+  id         String   @id @default(uuid())
+  eventoId   String
+  usuarioId  String
+  nota       Int
+  comentario String?
+  timestamp  DateTime @default(now())
+  evento     Evento   @relation(fields: [eventoId], references: [id])
+  usuario    Usuario  @relation(fields: [usuarioId], references: [id])
+
+  @@unique([eventoId, usuarioId])
+}
+
+model Certificado {
+  id              String   @id @default(uuid())
+  eventoId        String
+  usuarioId       String
+  urlPdf          String
+  dataEmissao     DateTime @default(now())
+  codigoValidacao String   @unique
+  evento          Evento   @relation(fields: [eventoId], references: [id])
+  usuario         Usuario  @relation(fields: [usuarioId], references: [id])
+}
+
+enum UserRole {
+  USER
+  ORGANIZER
+}
+
+enum EventoTipo {
+  GRATUITO
+  PAGO
+}
+
+enum EventoStatus {
+  RASCUNHO
+  PUBLICADO
+  CANCELADO
+  FINALIZADO
+}
+
+enum InscricaoStatus {
+  PENDENTE
+  APROVADA
+  REJEITADA
+  CANCELADA
+}
+
+enum MetodoCheckin {
+  MANUAL
+  QR
+}
+
+enum StatusAmizade {
+  PENDENTE
+  ACEITA
+  BLOQUEADA
+}
+
+enum TipoMensagem {
+  TEXTO
+  IMAGEM
+  ARQUIVO
+}
